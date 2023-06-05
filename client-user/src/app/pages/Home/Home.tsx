@@ -35,9 +35,6 @@ const Home = () => {
                     {!account ?
                         <>
                             <button className='text-5xl mb-16' onClick={connectWallet}>_Connect wallet</button>
-                            <Link to='/help'>
-                                <button className='text-lg'>_What is wallet?</button>
-                            </Link>
                         </>
                         :
                         <>
@@ -49,6 +46,9 @@ const Home = () => {
 
                         </>
                     }
+                    <Link to='/support'>
+                        <button className='text-lg mt-10'>_Get all support you need here</button>
+                    </Link>
                 </div>
                 <span></span>
             </div>

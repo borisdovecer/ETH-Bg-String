@@ -1,6 +1,6 @@
 const Header = () => {
     return (
-        <div className='my-8 w-full'>
+        <div className='fixed w-full border-b flex justify-between items-center h-10 z-50'>
             Header
         </div>
     )

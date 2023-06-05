@@ -1,6 +1,6 @@
 const Sidebar = () => {
     return (
-        <div className='my-8 w-full'>
+        <div className='w-full z-10 h-screen pt-4 border-r'>
             Sidebar
         </div>
     )

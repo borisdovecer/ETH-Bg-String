@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 
 const App = () =>  {
   return (
-    <div className='mt-16 text-center'>
+    <div className='h-screen bg-blue-400 text-center'>
         <BrowserRouter>
             <Layout />
         </BrowserRouter>

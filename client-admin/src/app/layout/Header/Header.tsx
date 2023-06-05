@@ -22,7 +22,7 @@ const Header = () => {
     const shortenAddress = account ? `${account.slice(0, 5)}...${account.slice(account.length - 4)}` : '';
 
     return (
-        <div className={`${!theme ? 'border-light-primary bg-dark-tertiary' : 'border-dark-primary bg-light-primary'} text-lg w-5/6 border-b flex justify-between items-center h-10 fixed z-50`}>
+        <div className={`${!theme ? 'border-light-primary bg-dark-tertiary' : 'border-dark-primary bg-light-primary'} text-lg w-full border-b flex justify-between items-center h-10 fixed z-50`}>
             <span className='pl-4'>String, Chain: {config.readOnlyChainName}</span>
             <span>Unlock your product story</span>
             <div>

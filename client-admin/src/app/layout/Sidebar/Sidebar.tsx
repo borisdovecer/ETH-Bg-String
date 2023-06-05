@@ -2,7 +2,7 @@ import { faHome, faTachometerAlt, faBoxOpen, faCog, faArrowAltCircleRight } from
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Link} from "react-router-dom";
 import _ from "lodash";
-
+import {useSelector} from "react-redux";
 
 interface IItem {
     text: string,
@@ -19,12 +19,14 @@ const items: IItem[] = [
 ];
 
 const Sidebar = () => {
+    const theme = useSelector((state:any) => state.config.theme);
+
     return (
-        <div className='w-full z-10 h-screen pt-4 border-r'>
+        <div className={`${theme ? 'border-dark-primary' : 'bg-dark-secondary border-light-primary'} w-full z-10 h-screen pt-4 border-r`}>
             <div className='flex justify-center'>
                 <img src='#' alt='logo' className='w-24 rounded-full' />
             </div>
-            <ul className='space-y-4 px-4 pt-8'>
+            <ul className='space-y-4 px-4 pt-8 text-left'>
                 {_.map(items, (item: IItem, index: number) => (
                     <li key={index}>
                         <Link to={item.link} className='text-2xl hover:text-blue-500'>

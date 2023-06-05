@@ -16,13 +16,11 @@ module.exports = {
     extend: {
       colors: {
         light: {
-          // Define your light theme colors here
           primary: '#ffffff',
           secondary: '#e2e2e2',
           tertiary: '#bdbdbd',
         },
         dark: {
-          // Define your dark theme colors here
           primary: '#575757',
           secondary: '#4f4f4f',
           tertiary: '#626262'

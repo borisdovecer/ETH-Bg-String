@@ -1,9 +1,12 @@
+import { Layout } from "@app/layout";
+import { BrowserRouter } from "react-router-dom";
 
 const App = () =>  {
-
   return (
     <div className='mt-16 text-center'>
-        app
+        <BrowserRouter>
+            <Layout />
+        </BrowserRouter>
     </div>
   )
 }

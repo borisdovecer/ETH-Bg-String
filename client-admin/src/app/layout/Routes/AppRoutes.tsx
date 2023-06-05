@@ -1,10 +1,12 @@
 import { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { IRoutes, routeConfig } from './config.tsx';
+import {IRoutes, routeBasic, routeConfig} from './config.tsx';
+import {useEthers} from "@usedapp/core";
 
 const AppRoutes: FC = () => {
-    const routes:IRoutes[] = routeConfig;
+    const { account } = useEthers();
 
+    const routes:IRoutes[] = account ? routeConfig : routeBasic;
     const router: JSX.Element[] = routes.map((route: IRoutes) =>
         <Route key={route.id} path={route.path} element={route.element} />
     );

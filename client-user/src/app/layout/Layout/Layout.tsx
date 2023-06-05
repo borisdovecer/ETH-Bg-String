@@ -2,7 +2,7 @@ import { AppRoutes } from "@app/layout";
 
 const Layout = () => {
     return (
-        <div>
+        <div className=''>
             <AppRoutes />
         </div>
     )

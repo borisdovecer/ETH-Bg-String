@@ -2,7 +2,7 @@
 import SwiperCore, { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
-import { QRCodeScanner } from "@app/components";
+// import { QRCodeScanner } from "@app/components";
 import { useState } from "react";
 import {Link} from "react-router-dom";
 
@@ -25,7 +25,8 @@ const ImageSlider = () => {
                     <div className='w-1/12 border-b-4 absolute right-0 border-black'></div>
                     <div className="text-2xl">
                         {showQR ?
-                            <QRCodeScanner />
+                            <p>Qr code scanner...</p>
+                            // <QRCodeScanner />
                             :
                             <div onClick={() => setShowQR(true)}>Click here</div>
                         }

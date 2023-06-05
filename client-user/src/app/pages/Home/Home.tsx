@@ -1,7 +1,13 @@
-import {Link} from "react-router-dom";
-import {Swiper} from "@app/components";
+import { Link } from "react-router-dom";
+import { Swiper } from "@app/components";
+import {useEthers} from "@usedapp/core";
 
 const Home = () => {
+    const { activateBrowserWallet, account }:any = useEthers();
+
+    const connectWallet = () => {
+        activateBrowserWallet();
+    };
 
     return (
         <div
@@ -26,11 +32,23 @@ const Home = () => {
             <div className='relative h-screen flex flex-col justify-between items-center' style={{scrollSnapAlign: 'start'}}>
                 <div className='h-1/5 border-r-4 border-black'></div>
                 <div className='flex flex-col'>
+                    {!account ?
+                        <>
+                            <button className='text-5xl mb-16' onClick={connectWallet}>_Connect wallet</button>
+                            <Link to='/help'>
+                                <button className='text-lg'>_What is wallet?</button>
+                            </Link>
+                        </>
+                        :
+                        <>
+                            <p>_Your wallet address:</p>
+                            <p className='font-bold'>{account}</p>
+                            <Link to='/products'>
+                                <button className='mt-16'>_Check your NFT products</button>
+                            </Link>
 
-                    <button className='text-5xl mb-16' onClick={() => {}}>_Connect wallet</button>
-                    <Link to='/help'>
-                        <button className='text-lg'>_What is wallet?</button>
-                    </Link>
+                        </>
+                    }
                 </div>
                 <span></span>
             </div>

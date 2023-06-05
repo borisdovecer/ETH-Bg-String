@@ -1,8 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
-import { Home, ErrorPage } from "@app/pages";
+import { Home, ErrorPage, Support, ProductDetails, ProductList } from "@app/pages";
 
 const routeConfig = [
     { id: 'home', path:'/', element: <Home /> },
+    { id: 'home', path:'/support', element: <Support /> },
+    { id: 'home', path:'/products/:id', element: <ProductDetails /> },
+    { id: 'home', path:'/products', element: <ProductList /> },
     { id: 'error', path:'*', element: <ErrorPage /> }
 ]
 

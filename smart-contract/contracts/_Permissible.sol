@@ -52,7 +52,7 @@ abstract contract Permissible is ERC721Enumerable, Ownable, StringModel {
     }
 
     function doesCompanyExist(Company storage company) private view {
-        if(company.initialized != 0){
+        if(company.initialized == 0){
             revert CompanyDoesNotExist();
         }
     }

@@ -1,4 +1,5 @@
 import {ComponentWrapper, Table} from "@app/components";
+import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = () => {
     const data = [
@@ -9,7 +10,7 @@ const Dashboard = () => {
 
     return (
         <div className='my-8 w-full'>
-            <ComponentWrapper title='Dashboard'>
+            <ComponentWrapper title='Dashboard' icon={faTachometerAlt}>
                 <Table data={data} />
             </ComponentWrapper>
         </div>

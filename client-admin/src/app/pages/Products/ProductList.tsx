@@ -2,20 +2,34 @@ import {faBoxOpen, faTag} from "@fortawesome/free-solid-svg-icons";
 import { ComponentWrapper } from "@app/components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import _ from "lodash";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useContractFunction, useEthers} from "@usedapp/core";
+import {Contract} from "ethers";
+import {contract} from "@app/config/chainConfig.ts";
+import StringNFT from "@app/abi/StringNFT.json";
 
 const fields = [
     { label: 'name_', name: 'name', type: 'text' },
     { label: 'description_', name: 'description', type: 'text' },
-    { label: 'image_', name: 'image', type: 'text' },
     { label: 'manufacturer_', name: 'manufacturer', type: 'text' },
-    { label: 'country_of_origin', name: 'countryOfOrigin', type: 'text' },
-    { label: 'warranty_', name: 'warranty', type: 'text' },
-    { label: 'recyclable_', name: 'recyclable', type: 'text' },
+    { label: 'category', name: 'category', type: 'text' },
+    { label: 'productTokens', name: 'productTokens', type: 'text' },
+    { label: 'expireDate', name: 'expireDate', type: 'text' },
+    { label: 'exists', name: 'exists', type: 'text' },
 ]
 
 const ProductList = () => {
     const [formData, setFormData] = useState<any>({});
+    const { activateBrowserWallet, account, library }:any = useEthers();
+    const [contractInstance, setContractInstance] = useState<Contract | null>(null);
+    const { send, state } = useContractFunction(contractInstance, 'addProduct', {});
+
+
+    useEffect(() => {
+        if(account && library){
+            setContractInstance(new Contract(contract.address, StringNFT.abi, library.getSigner()));
+        }
+    }, [account, library]);
 
     const handleChange = (e:any) => {
         const {name, value} = e.target;
@@ -23,7 +37,9 @@ const ProductList = () => {
     }
 
     const handleSubmit = () => {
-        console.log(formData);
+        const { name, description, manufacturer, category, productTokens, expireDate, exists } = formData;
+        send(0,name, description, manufacturer, category, 234).then((res) => console.log(res))
+        console.log(state)
     }
 
     return (

@@ -30,7 +30,8 @@ const Accounts = () => {
     const [address, setAddress] = useState('');
     const { activateBrowserWallet, account, library }:any = useEthers();
     const [contractInstance, setContractInstance] = useState<Contract | null>(null);
-    const { send } = useContractFunction(contractInstance, 'addEmployee', {gasLimitBufferPercentage: 100});
+    const addEmployee = useContractFunction(contractInstance, 'addEmployee', {gasLimitBufferPercentage: 100});
+    const removeEmployee = useContractFunction(contractInstance, 'removeEmployee', {gasLimitBufferPercentage: 100});
 
     useEffect(() => {
         if(account && library){
@@ -39,15 +40,24 @@ const Accounts = () => {
     }, [account, library]);
 
     useEffect(() => {
-        contractInstance?.getAllEmployees(0, { gasLimit: 131200 }).then((res:string) => console.log(res))
+        contractInstance?.getAllEmployees(1).then((res:string) => console.log(res))
     }, [contractInstance]);
 
-    const handleAddEmpoloyee = async () => {
+    const handleAddEmployee = async () => {
+        const { send } = addEmployee;
         if (!account) {
             await activateBrowserWallet();
             return;
         }
         send(1, address,[true,true,true,true]).then((res) => console.log(res));
+    };
+    const handleRemoveEmployee = async () => {
+        const { send } = removeEmployee
+        if (!account) {
+            await activateBrowserWallet();
+            return;
+        }
+        send(0, address).then((res) => console.log(res));
     };
 
     const handleChange = (e:any) => {
@@ -84,10 +94,10 @@ const Accounts = () => {
                         <input onChange={handleChange} className='text-black border-black border mx-8 pl-2 w-full rounded-xl' type='text' placeholder='Address' />
                     </div>
                     <div className='w-full text-right space-x-4 pr-8'>
-                        <button onClick={handleAddEmpoloyee} className='bg-dark-primary text-light-primary w-1/4 rounded-2xl'>
+                        <button onClick={handleAddEmployee} className='bg-dark-primary text-light-primary w-1/4 rounded-2xl'>
                             add employee
                         </button>
-                        <button className='bg-dark-primary text-light-primary w-1/4 rounded-2xl'>
+                        <button onClick={handleRemoveEmployee} className='bg-dark-primary text-light-primary w-1/4 rounded-2xl'>
                             remove employee
                         </button>
                     </div>

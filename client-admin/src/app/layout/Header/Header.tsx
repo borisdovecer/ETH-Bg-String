@@ -18,6 +18,7 @@ const Header = () => {
 
     const { activateBrowserWallet, account, library }:any = useEthers();
     const [contractInstance, setContractInstance] = useState<Contract | null>(null);
+
     useEffect(() => {
         if(library){
             setContractInstance(new Contract(contract.address, StringNFT.abi, library));
@@ -54,15 +55,15 @@ const Header = () => {
     return (
         <div className={`${!theme ? 'bg-dark-tertiary' : 'bg-light-primary'} text-lg w-full flex justify-between items-center h-10 fixed z-50 rounded-b-xl`}>
             <div className='flex flex-row items-center'>
-                <div className='w-12 bg-dark-primary h-1' />
+                <div className={`w-12 ${theme ? 'bg-dark-primary' : 'bg-light-primary'} h-1`} />
                 <div className='pl-4 font-bold text-2xl'>
                     {contractName}
                 </div>
             </div>
             <div className='flex flex-row items-center'>
                 <div className='flex flex-row'>
-                    <div className='bg-light-secondary px-2 rounded-3xl'>
-                        <FontAwesomeIcon icon={faWallet} />
+                    <div className='px-2 rounded-3xl'>
+                        <FontAwesomeIcon icon={faWallet} className='mx-2' />
                         <span >{shortenAddress}</span>
                     </div>
 
@@ -104,7 +105,7 @@ const Header = () => {
                         </span>
                     }
                 </div>
-                <div className='w-12 bg-dark-primary h-1' />
+                <div className={`w-12 ${theme ? 'bg-dark-primary' : 'bg-light-primary'} h-1`} />
             </div>
         </div>
     )

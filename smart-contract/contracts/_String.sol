@@ -1,157 +1,129 @@
 // SPDX-License-Identifier: UNLICENSED
 
 pragma solidity ^0.8.9;
+import "./_Base.sol";
 import "./_Permissible.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 error InvalidProductIndex();
 error MintTooMuchError();
+error ProductDoesntExist();
 
-contract StringNFT is Permissible {
-    using Strings for uint256;
-    uint256 private currentTokenId = 0;
-    uint16 public constant MAX_MINT_AMOUNT = 1000;
-    uint public companyCounter = 0;
+contract StringNFT is BaseContract, Permissible {
+    event CompanyData(Company company);
 
-    mapping(uint => Company) public companies;
-
-    constructor() ERC721("StringNFT", "SNFT") {}
-
-    //Events
-    event CompanyAdded(uint indexed companyId, string name);
-    event CompanyRemoved(uint indexed companyId);
-    event EmployeeAdded(uint indexed companyId, address indexed employee);
-    event EmployeeRemoved(uint indexed companyId, address indexed employee);
-    event ProductAdded(uint indexed companyId, uint indexed productId, string name);
-    event ProductRemoved(uint indexed companyId, uint indexed productId);
-    event TokenMinted(uint indexed companyId, uint indexed productId, uint indexed tokenId, address to);
-    event TokenTransferred(uint indexed tokenId, address indexed from, address indexed to);
-
-
-    // Company and Employees:
-    function addCompany(string memory _name) external onlyOwner {
-        companyCounter++;
-        companies[companyCounter].name = _name;
-        companies[companyCounter].initialized = 1;
-        emit CompanyAdded(companyCounter, _name);
+    function addCompany(string calldata _companyName) external {
+        companies[counters.companyCount] = Company(_companyName, new address[](0), new uint32[](0), 0);
+        counters.companyCount++;
     }
 
-    function removeCompany(uint companyId) external onlyOwner  {
-        delete companies[companyId];
-        emit CompanyRemoved(companyId);
+    function getCompanyBy(uint16 _companyId) external view returns  (Company memory) {
+        Company memory company = companies[_companyId];
+        return company;
     }
 
-    function addEmployee(uint _companyId, address _employee, Role memory _permissions) external onlyOwner canAuthorize(companies[_companyId]) {
-        companies[_companyId].employees[_employee] = Employee(_permissions, _employee, _companyId);
-        companies[_companyId].employeeAddresses.push(_employee);
-        emit EmployeeAdded(_companyId, _employee);
-    }
+    function getAllCompanies() public view returns (Company[] memory) {
+        Company[] memory allCompanies = new Company[](counters.companyCount);
 
-    function getAllEmployees(uint _companyId) external view returns (Employee[] memory){
-        Company storage company = companies[_companyId];
-
-        uint length = company.employeeAddresses.length;
-        Employee[] memory employees = new Employee[](length);
-
-        for (uint i = 0; i < length; i++) {
-            employees[i] = company.employees[company.employeeAddresses[i]];
+        for (uint16 i = 0; i < counters.companyCount; i++) {
+            allCompanies[i] = companies[i];
         }
 
-        return employees;
+        return allCompanies;
     }
 
-    function removeEmployee(uint _companyId, address _employee) external canAuthorize(companies[_companyId]) {
-        Company storage company = companies[_companyId];
-        delete company.employees[_employee];
-        emit EmployeeRemoved(_companyId, _employee);
+    function removeCompany(uint16 _companyId) external {
+        delete companies[_companyId];
+        counters.companyCount--;
     }
 
-    // Products:
-    function addProduct(
-        uint _companyId,
-        string memory _name,
-        string memory _description,
-        string memory _manufacturer,
-        string memory _category,
-        uint256 _expireDate
-    ) external canDefine(companies[_companyId]) {
-        Company storage company = companies[_companyId];
-        company.productCount++;
-
-        Product memory newProduct = Product(
-            _name,
-            _description,
-            _manufacturer,
-            _category,
-            new uint[](0),
-            _expireDate,
-            true
-        );
-        company.products[company.productCount] = newProduct;
-        emit ProductAdded(_companyId, company.productCount, _name);
+    function addEmployeeToCompany(uint16 _companyId, address _employeeAddress, uint8 _permissions) external {
+        employees[_employeeAddress] = Employee(_companyId, _permissions);
+        companies[_companyId].employees.push(_employeeAddress);
+        counters.employeeCount++;
     }
 
-    function removeProduct(uint _companyId, uint256 _productId) external canDefine(companies[_companyId]) {
-        Company storage company = companies[_companyId];
-        Product storage product = company.products[_productId];
-
-        require(product.productTokens.length == 0, "Product has tokens attached to it.");
-
-        delete company.products[_productId];
-        emit ProductRemoved(_companyId, _productId);
+    function getEmployee(address _employeeAddress) external view returns (Employee memory){
+        Employee memory employee = employees[_employeeAddress];
+        return employee;
     }
 
-    function getProduct(uint _companyId, uint256 _productId) external view returns (Product memory) {
-        Company storage company = companies[_companyId];
-        Product storage product = company.products[_productId];
-        require(product.exists , "Product does not exist");
+    function getAllEmployeesInCompany(uint16 _companyId) external view returns (Employee[] memory) {
+        Employee[] memory allEmployees = new Employee[](counters.employeeCount);
+        Company memory company = companies[_companyId];
+
+        for (uint256 i = 0; i < company.employees.length; i++) {
+            allEmployees[i] = employees[company.employees[i]];
+        }
+
+        return allEmployees;
+    }
+
+    // this should also remove the employee from the employees array in the company
+    function removeEmployee(address _employeeAddress) external{
+        delete employees[_employeeAddress];
+        counters.employeeCount--;
+    }
+
+    function addProductToCompany(uint16 _companyId, string memory _productName, string memory _metadata) external {
+        products[counters.productCount] = Product(_productName, _metadata, new uint64[](0), true);
+        companies[_companyId].products.push(counters.productCount);
+        counters.productCount++;
+    }
+
+    function getProduct(uint64 _productId) external view returns (Product memory){
+        Product memory product = products[_productId];
         return product;
     }
 
-    function getAllProducts(uint companyId) external view returns (Product[] memory) {
-        Company storage company = companies[companyId];
-        Product[] memory productArray = new Product[](company.productCount);
+    function getAllProducts(uint16 _companyId) external view returns (Product[] memory) {
+        Company memory company = companies[_companyId];
+        Product[] memory allProducts = new Product[](counters.productCount);
 
-        for (uint i = 1; i <= company.productCount; i++) {
-            productArray[i-1] = company.products[i];
+        for (uint256 i = 0; i < company.products.length; i++) {
+            allProducts[i] = products[company.products[i]];
         }
-        return productArray;
+        return allProducts;
     }
 
-    function getProductCount(uint _companyId) external view returns (uint256) {
-        Company storage company = companies[_companyId];
-        return company.productCount;
+    function removeProduct(uint64 _productId) external{
+        delete products[_productId];
+        counters.productCount--;
     }
 
-    // Minting and transfer:
-    function mint(uint _companyId, uint _productId) public canMint(companies[_companyId]) {
-        currentTokenId++;
-        Company storage company = companies[_companyId];
-        Product storage product = company.products[_productId];
-        require(product.exists , "Product does not exist");
-        product.productTokens.push(currentTokenId);
-       _mint(msg.sender, currentTokenId);
-        emit TokenMinted(_companyId, _productId, currentTokenId, msg.sender);
+    function mint(uint32 _productId) external {
+        counters.tokenIdCount++;
+        Product storage productToMint = products[_productId];
+
+        // if(!product.exists){
+            // revert ProductDoesntExist();
+        // }
+
+        productToMint.productTokens.push(counters.tokenIdCount);
+       _mint(msg.sender, counters.tokenIdCount);
     }
 
-    function mintBulk(uint _companyId, uint _productId, uint16 amount) external canMint(companies[_companyId]) {
+    function burn(uint32 _tokenId) external{
+        _burn(_tokenId);
+    }
+
+    function mintBulk(uint64 _productId, uint16 amount) external {
         if (amount > MAX_MINT_AMOUNT)
              revert MintTooMuchError();
 
         for (uint16 i = 0; i < amount; i++) {
-            mint(_companyId, _productId);
+            _mint(msg.sender, _productId);
         }
     }
 
-    function transfer(address to, uint256 _tokenId) public onlyOwnerOf(_tokenId) {
+    function transferTo(address to, uint256 _tokenId) external  {
         transferFrom(msg.sender, to, _tokenId);
-        emit TokenTransferred(_tokenId, msg.sender, to);
     }
 
-    function bulkTransfer(address to, uint256[] memory tokenIds) public {
+    function bulkTransfer(address to, uint256[] memory tokenIds) external {
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            transfer(to, tokenIds[i]);
+            transferFrom(msg.sender, to, tokenIds[i]);
         }
     }
 
@@ -164,4 +136,5 @@ contract StringNFT is Permissible {
         return tokensId;
     }
 
+    constructor() ERC721("StringNFT", "SNFT") {}
 }

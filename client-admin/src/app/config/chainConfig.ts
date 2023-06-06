@@ -9,11 +9,7 @@ export const config = {
     },
 };
 
-export const contractAddress = {
-    address: '0xd875A8fDd636F2C71239334E3a1aA58165538f2D'
-}
-
 // contract treba u .env
 export const contract = {
-    address: '0xd875A8fDd636F2C71239334E3a1aA58165538f2D',
+    address: '0xc21C066e574bb5227Cb3C7dbE9c41319A34D2D04',
 }

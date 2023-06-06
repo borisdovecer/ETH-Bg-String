@@ -31,10 +31,10 @@ contract StringNFT is Permissible {
 
     // Company and Employees:
     function addCompany(string memory _name) external onlyOwner {
+        companyCounter++;
         companies[companyCounter].name = _name;
         companies[companyCounter].initialized = 1;
         emit CompanyAdded(companyCounter, _name);
-        companyCounter++;
     }
 
     function removeCompany(uint companyId) external onlyOwner  {

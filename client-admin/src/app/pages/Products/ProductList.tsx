@@ -20,6 +20,10 @@ const images = [
     {id: 1, image: 'https://via.placeholder.com/150'},
     {id: 1, image: 'https://via.placeholder.com/150'},
     {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
 ];
 
 const fields = [
@@ -60,7 +64,7 @@ const ProductList = () => {
         <div className='my-8 w-full'>
             <ComponentWrapper title='Products' icon={faBoxOpen}>
                 <div className='flex flex-row space-x-4'>
-                    <div className='border-2 w-full h-[600px] border-light-primary custom-scrollbar overflow-y-scroll'>
+                    <div className='w-full max-h-[700px] custom-scrollbar overflow-y-scroll'>
                         <div className="grid grid-cols-3 gap-4 py-4">
                             {images.map((img, index) => (
                                 <Link to={`/products/${img.id}`}>

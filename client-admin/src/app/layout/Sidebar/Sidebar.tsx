@@ -39,14 +39,14 @@ const Sidebar = ({openSidebar, setOpenSidebar}:any) => {
     };
 
     return (
-        <div className={`${!theme ? 'border-dark-primary text-light-primary' : 'bg-dark-secondary'} w-full z-10 h-screen pt-4 px-4 border-r`}>
+        <div className={`${!theme ? 'border-dark-primary text-light-primary' : 'bg-dark-secondary'} w-full z-10 h-screen pt-4 px-2 border-r`}>
             <div className='flex justify-left text-light-primary mt-12 ml-1 text-xl'>
                 <FontAwesomeIcon icon={faBars} onClick={() => setOpenSidebar(!openSidebar)} />
             </div>
             <ul className='space-y-6 pt-6 text-left'>
                 {_.map(items, (item: IItem, index: number) => (
                     <li key={index} onClick={() => handleItemClick(item.id)}>
-                        <Link to={item.link}  className={`text-xl text-light-primary hover:text-blue-500 ${activeItem === item.id ? 'text-blue-500' : ''}`}>
+                        <Link to={item.link}  className={`text-xl text-light-primary pl-2 hover:border-l-2 ${activeItem === item.id ? 'border-l-2 font-extrabold' : ''}`}>
                             <FontAwesomeIcon icon={item.icon} className="mr-4" />
                             {openSidebar && <span>{item.text}</span>}
                         </Link>

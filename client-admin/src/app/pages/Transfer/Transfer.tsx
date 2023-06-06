@@ -1,11 +1,15 @@
 import {ComponentWrapper, Table} from "@app/components";
-import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
+import {faArrowAltCircleRight} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Transfer = () => {
     const data = [
         {id: '1', name: 'boris', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' },
-        {id: '2', name: 'boris', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' },
-        {id: '3', name: 'boris', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' }
+        {id: '2', name: 'zxcc', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' },
+        {id: '3', name: 'zxcczc', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' },
+        {id: '4', name: 'eeee', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' },
+        {id: '5', name: '43242', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' },
+        {id: '6', name: 'vcx', timeStamp: '55522', warrenty: "ima", isRecylable: 'jeste' },
     ];
 
     return (
@@ -14,27 +18,22 @@ const Transfer = () => {
                 <div className='mb-4'>
                     <Table data={data} />
                 </div>
-
-
-                <div className='flex flex-row space-x-4'>
-                    <div className='bg-light-primary text-black rounded-3xl w-1/2'>
-                        <div className='px-4'>
-                            <p>tilele</p>
-                            <p>tilele</p>
-                            <p>tilele</p>
-                            <p>tilele</p>
-                        </div>
+                <div className='flex flex-row space-x-4 bg-light-primary text-black text-lg font-bold justify-between rounded-3xl h-8 text-center items-center'>
+                    <div className='w-full'>
+                        <span>Transfer to: </span>
+                        <input className='text-black border-black border pl-2 rounded-xl' type='text' placeholder='Address' />
                     </div>
-                    <div className='bg-light-primary text-black rounded-3xl w-1/2'>
-                        <div className='px-4'>
-                            <p>tilele</p>
-                            <p>tilele</p>
-                            <p>tilele</p>
-                            <p>tilele</p>
-                        </div>
+                    <div className='w-full'>
+                        <span>token count</span>
+                        <span className='mx-2 px-2 bg-light-secondary rounded-lg'>6</span>
+                    </div>
+                    <div className='w-full'>
+                        <button className='bg-dark-primary text-light-primary w-1/2 rounded-2xl'>
+                            <FontAwesomeIcon icon={faArrowAltCircleRight} className="mx-2" />
+                            transfer
+                        </button>
                     </div>
                 </div>
-
             </ComponentWrapper>
         </div>
     )

@@ -63,7 +63,7 @@ const Table = ({ data }:any) => {
                     {data.map((row:any, rowIndex:number) => (
                         <tr
                             key={rowIndex}
-                            className={`${theme ? "bg-light-primary text-dark-primary" : "bg-dark-tertiary text-dark-primary"}`}
+                            className={`${theme ? "bg-light-primary text-dark-secondary" : "bg-dark-tertiary text-light-primary"}`}
                         >
                             {headers.map((header) => (
                                 <td

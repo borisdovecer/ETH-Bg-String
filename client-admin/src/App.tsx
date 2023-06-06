@@ -1,6 +1,6 @@
 import { Layout } from "@app/layout";
 import { BrowserRouter } from "react-router-dom";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const App = () =>  {
     const theme = useSelector((state:any) => state.config.theme);

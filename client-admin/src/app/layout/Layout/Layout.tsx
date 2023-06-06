@@ -2,8 +2,10 @@ import { Header, Sidebar } from "@app/layout";
 import AppRoutes from "@app/layout/Routes/AppRoutes.tsx";
 import {useEthers} from "@usedapp/core";
 import {useState} from "react";
+import {useSelector} from "react-redux";
 
 const Layout = () => {
+    const theme = useSelector((state:any) => state.config.theme);
     const { account }:any = useEthers();
     const [openSidebar, setOpenSidebar] = useState(true);
 
@@ -16,7 +18,7 @@ const Layout = () => {
                 </div>
             }
             <div className='w-full custom-scrollbar overflow-y-scroll'>
-                <div className=' bg-light-secondary h-screen px-4 py-12'>
+                <div className={`${theme ? 'bg-light-secondary' : 'bg-dark-secondary'} h-screen px-4 py-12`}>
                     <AppRoutes />
                 </div>
             </div>

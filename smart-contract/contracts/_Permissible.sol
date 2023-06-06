@@ -3,6 +3,7 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./_StringModel.sol";
 
 error NoTokenFound();
@@ -10,7 +11,7 @@ error NotYourToken();
 error CompanyDoesNotExist();
 error CallerDoesntHavePermissions();
 
-abstract contract Permissible is ERC721Enumerable, StringModel {
+abstract contract Permissible is ERC721Enumerable, Ownable, StringModel {
 
     constructor(){}
 
@@ -38,7 +39,7 @@ abstract contract Permissible is ERC721Enumerable, StringModel {
     modifier canAuthorize(Company storage company) {
         doesCompanyExist(company);
         Role storage incomingEmployeeRoles = company.employees[msg.sender].permissions;
-        require(incomingEmployeeRoles.canAuthorize, "Caller does not have permission to authorize");
+        require(msg.sender == owner() || incomingEmployeeRoles.canAuthorize, "Caller does not have permission to authorize");
         _;
     }
 

@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
@@ -15,10 +16,12 @@ abstract contract StringModel {
         mapping(address => Employee) employees;
         mapping(uint256 => Product) products;
         uint productCount;
+        address[] employeeAddresses;
     }
 
     struct Employee {
         Role permissions;
+        address employeeAddress;
         uint companyId;
     }
 

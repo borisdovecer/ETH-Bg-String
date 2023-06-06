@@ -1,10 +1,47 @@
 import _ from 'lodash';
 import {useSelector} from "react-redux";
+import {Link} from "react-router-dom";
+import moment from "moment";
 
 const Table = ({ data }:any) => {
     const headers = Object.keys(data[0]);
 
     const theme = useSelector((state:any) => state.config.theme);
+
+    const cellFormat = (row:any, header: string) => {
+        if (header === 'timeStamp') {
+            const date: Date = new Date(row[header] * 1000);
+            return moment(date).startOf('hour').fromNow()
+        }
+        if (header === 'blockNumber' && row[header]) {
+            return (
+                <Link to={`https://sepolia.etherscan.io/block/${row[header]}`} target="_blank">
+                    {row[header]}
+                </Link>
+            );
+        }
+
+        if (_.includes(['contractAddress', 'to', 'from', 'blockHash', 'hash'], header)) {
+            if (header === 'hash' && row[header]) {
+                return (
+                    <Link to={`https://sepolia.etherscan.io/tx/${row[header]}`} target="_blank">
+                        {row[header].slice(0, 5)}...{row[header].slice(row[header].length - 4)}
+                    </Link>
+                );
+            }
+
+            if (_.includes(['to', 'from', 'contractAddress'], header) && row[header]) {
+                return (
+                    <Link to={`https://sepolia.etherscan.io/address/${row[header]}`} target="_blank">
+                        {row[header].slice(0, 5)}...{row[header].slice(row[header].length - 4)}
+                    </Link>
+                );
+            }
+            return `${row[header].slice(0, 5)}...${row[header].slice(row[header].length - 4)}`
+        }
+
+        return row[header]
+    }
 
     return (
         <>
@@ -33,7 +70,7 @@ const Table = ({ data }:any) => {
                                     key={header}
                                     className="px-2 md:px-4 py-2 text-center"
                                 >
-                                    {row[header]}
+                                    {cellFormat(row, header)}
                                 </td>
                             ))}
 

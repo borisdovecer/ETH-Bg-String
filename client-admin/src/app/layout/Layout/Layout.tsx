@@ -15,8 +15,8 @@ const Layout = () => {
                     <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
                 </div>
             }
-            <div className='w-full'>
-                <div className='custom-scrollbar overflow-y-scroll bg-light-secondary h-screen px-4 pt-12'>
+            <div className='w-full custom-scrollbar overflow-y-scroll'>
+                <div className=' bg-light-secondary h-screen px-4 py-12'>
                     <AppRoutes />
                 </div>
             </div>

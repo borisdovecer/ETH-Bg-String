@@ -28,7 +28,7 @@ const ProductList = () => {
 
     return (
         <div className='my-8 w-full'>
-            <ComponentWrapper title='Tranfer' icon={faBoxOpen}>
+            <ComponentWrapper title='Products' icon={faBoxOpen}>
                 <div className='flex flex-row space-x-4'>
                     <div className='border-2 w-full border-light-primary'>
 

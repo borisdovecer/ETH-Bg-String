@@ -14,7 +14,7 @@ const Transfer = () => {
 
     return (
         <div className='my-8 w-full'>
-            <ComponentWrapper title='Tranfer' icon={faArrowAltCircleRight}>
+            <ComponentWrapper title='Transfer' icon={faArrowAltCircleRight}>
                 <div className='mb-4'>
                     <Table data={data} />
                 </div>

@@ -94,7 +94,7 @@ const Header = () => {
                                     <Link to="/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200" onClick={() => setIsDropdownOpen(false)}>
                                         Account
                                     </Link>
-                                    <Link to={`https://sepolia.etherscan.io/address/0x6AE5a7048ac76C4026cdBBFd47268Bc647933a9d`} target='_blank'>
+                                    <Link to={`https://sepolia.etherscan.io/address/${contract.address}`} target='_blank'>
                                     <span className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                                         View on Etherscan
                                     </span>

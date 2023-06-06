@@ -12,7 +12,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-[#f4b558] z-50 rounded;
+    @apply bg-dark-primary z-50 rounded;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {

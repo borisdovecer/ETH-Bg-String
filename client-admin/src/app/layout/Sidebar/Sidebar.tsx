@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Link} from "react-router-dom";
 import _ from "lodash";
 import {useSelector} from "react-redux";
-import {useState} from "react";
 
 interface IItem {
     text: string,

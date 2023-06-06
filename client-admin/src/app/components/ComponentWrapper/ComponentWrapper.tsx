@@ -1,5 +1,6 @@
-import {useSelector} from "react-redux";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faFilter, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 
 const ComponentWrapper = ({children, title, icon}: any) => {
     const theme = useSelector((state:any) => state.config.theme);
@@ -12,9 +13,10 @@ const ComponentWrapper = ({children, title, icon}: any) => {
                     <p className={`pl-2`}>{title}</p>
                 </div>
                 <div className='mr-4'>
-                    <p>nesto</p>
+                    <FontAwesomeIcon icon={faSearch} className="mx-2" />
+                    <FontAwesomeIcon icon={faFilter} className="mx-2" />
+                    <FontAwesomeIcon icon={faEllipsisV} className="mx-2" />
                 </div>
-
             </div>
             <div className={`p-4`}>
                 {children}

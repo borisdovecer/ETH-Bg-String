@@ -10,14 +10,14 @@ const Table = ({ data }:any) => {
         <>
             <div className="overflow-x-auto custom-scrollbar mt-6 rounded-3xl">
                 <table className="w-full">
-                    <thead className="">
+                    <thead>
                     <tr className='rounded-2xl'>
                         {headers.map((header) => (
                             <th
                                 key={header}
-                                className={`${!theme ? 'bg-dark-secondary' : 'bg-light-secondary'} px-2 md:px-4 py-2  font-bold cursor-pointer`}
+                                className={`${!theme ? 'bg-dark-secondary text-light-primary' : 'bg-light-secondary text-dark-primary'} px-2 md:px-4 py-2 font-bold cursor-pointer`}
                             >
-                                {header}
+                                {_.startCase(header)}
                             </th>
                         ))}
                     </tr>
@@ -26,12 +26,12 @@ const Table = ({ data }:any) => {
                     {data.map((row:any, rowIndex:number) => (
                         <tr
                             key={rowIndex}
-                            className={`${rowIndex % 2 === 0 ? (theme ? "bg-light-tertiary" : "bg-dark-tertiary") : (theme ? "bg-light-secondary" : "bg-dark-primary")}`}
+                            className={`${theme ? "bg-light-primary text-dark-primary" : "bg-dark-tertiary text-dark-primary"}`}
                         >
                             {headers.map((header) => (
                                 <td
                                     key={header}
-                                    className="px-2 md:px-4 py-2 border-t border-b text-center"
+                                    className="px-2 md:px-4 py-2 text-center"
                                 >
                                     {row[header]}
                                 </td>

@@ -43,7 +43,7 @@ contract StringNFT is Permissible {
     }
 
     function addEmployee(uint _companyId, address _employee, Role memory _permissions) external onlyOwner canAuthorize(companies[_companyId]) {
-        companies[_companyId].employees[_employee] = Employee({permissions: _permissions, employeeAddress: _employee, companyId: _companyId});
+        companies[_companyId].employees[_employee] = Employee(_permissions, _employee, _companyId);
         companies[_companyId].employeeAddresses.push(_employee);
         emit EmployeeAdded(_companyId, _employee);
     }
@@ -79,15 +79,15 @@ contract StringNFT is Permissible {
         Company storage company = companies[_companyId];
         company.productCount++;
 
-        Product memory newProduct = Product({
-            name: _name,
-            description: _description,
-            manufacturer: _manufacturer,
-            category: _category,
-            productTokens: new uint[](0),
-            expireDate: _expireDate,
-            exists: true
-        });
+        Product memory newProduct = Product(
+            _name,
+            _description,
+            _manufacturer,
+            _category,
+            new uint[](0),
+            _expireDate,
+            true
+        );
         company.products[company.productCount] = newProduct;
         emit ProductAdded(_companyId, company.productCount, _name);
     }

@@ -21,9 +21,9 @@ module.exports = {
           tertiary: '#bdbdbd',
         },
         dark: {
-          primary: '#575757',
-          secondary: '#4f4f4f',
-          tertiary: '#626262'
+          primary: '#282828',
+          secondary: '#212121',
+          tertiary: '#000000'
         },
       },
     },

@@ -22,14 +22,14 @@ const Sidebar = () => {
     const theme = useSelector((state:any) => state.config.theme);
 
     return (
-        <div className={`${theme ? 'border-dark-primary' : 'bg-dark-secondary border-light-primary'} w-full z-10 h-screen pt-4 border-r`}>
+        <div className={`${!theme ? 'border-dark-primary text-light-primary' : 'bg-dark-secondary'} w-full z-10 h-screen pt-4 border-r`}>
             <div className='flex justify-center'>
                 <img src='#' alt='logo' className='w-24 rounded-full' />
             </div>
             <ul className='space-y-4 px-4 pt-8 text-left'>
                 {_.map(items, (item: IItem, index: number) => (
                     <li key={index}>
-                        <Link to={item.link} className='text-2xl hover:text-blue-500'>
+                        <Link to={item.link} className='text-2xl text-light-primary hover:text-blue-500'>
                             <FontAwesomeIcon icon={item.icon} className="mr-2" />
                             {item.text}
                         </Link>

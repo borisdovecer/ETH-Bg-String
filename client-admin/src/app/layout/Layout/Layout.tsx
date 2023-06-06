@@ -14,7 +14,7 @@ const Layout = () => {
                 </div>
             }
             <div className={`${account ? 'w-5/6' : 'w-full'}`}>
-                <div className='custom-scrollbar overflow-y-scroll h-screen px-4 pt-12'>
+                <div className='custom-scrollbar overflow-y-scroll bg-light-secondary h-screen px-4 pt-12'>
                     <AppRoutes />
                 </div>
             </div>

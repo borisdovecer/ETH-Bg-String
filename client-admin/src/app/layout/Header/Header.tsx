@@ -1,15 +1,18 @@
-import {useDispatch, useSelector} from "react-redux";
-import {toggleTheme} from "@app/config/configReducer.ts";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "@app/config/configReducer.ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon, faUser, faWallet } from '@fortawesome/free-solid-svg-icons';
-import {useEthers} from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 import StringNFT from "@app/abi/StringNFT.json";
 import { Contract } from "ethers";
-import {useEffect, useState} from "react";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
     const theme = useSelector((state:any) => state.config.theme);
     const dispatch = useDispatch();
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+    const dropdownRef = useRef<HTMLSpanElement>(null);
     const [contractName, setContractName] = useState<string>('')
 
     const { activateBrowserWallet, account, library }:any = useEthers();
@@ -32,6 +35,19 @@ const Header = () => {
         dispatch(toggleTheme());
     }
 
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
     const shortenAddress = account ? `${account.slice(0, 5)}...${account.slice(account.length - 4)}` : '';
 
     return (
@@ -49,7 +65,7 @@ const Header = () => {
                         <span >{shortenAddress}</span>
                     </div>
 
-                    <span className="mx-4">
+                    <span className="ml-4">
                     {theme ?
                         <button onClick={handleThemeToggleClick}>
                             <FontAwesomeIcon icon={faMoon} />
@@ -65,9 +81,26 @@ const Header = () => {
                             _connect wallet
                         </button>
                         :
-                        <button  className="px-4">
-                            <FontAwesomeIcon icon={faUser} />
-                        </button>
+                        <span ref={dropdownRef} className="px-4">
+                            <FontAwesomeIcon icon={faUser} onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
+                            {isDropdownOpen && (
+                                <div className="absolute mt-1.5 right-0 w-64 bg-white shadow-lg rounded border-gray-300 border mr-1 scale-in-tr">
+                                    <div className="block px-4 py-2 text-gray-800 border-b border-gray-300 ">
+                                        <p>
+                                            ...
+                                        </p>
+                                    </div>
+                                    <Link to="/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200" onClick={() => setIsDropdownOpen(false)}>
+                                        Account
+                                    </Link>
+                                    <Link to='https://sepolia.etherscan.io/address/0x6AE5a7048ac76C4026cdBBFd47268Bc647933a9d' target='_blank'>
+                                    <span className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                        View on Etherscan
+                                    </span>
+                                    </Link>
+                                </div>
+                            )}
+                        </span>
                     }
                 </div>
                 <div className='w-12 bg-dark-primary h-1' />

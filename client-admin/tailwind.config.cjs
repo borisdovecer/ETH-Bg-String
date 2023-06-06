@@ -10,8 +10,8 @@ module.exports = {
       xl: '1440px',
     },
     fontFamily: {
-      sans: ['Heming'],
-      serif: ['Heming'],
+      sans: ['heming-variable', 'sans-serif'], // use here
+      serif: ['heming-variable', 'serif'], // and here if you want
     },
     extend: {
       colors: {

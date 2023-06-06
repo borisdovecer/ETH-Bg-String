@@ -6,7 +6,6 @@ const Settings = () => {
         <div className='my-8 w-full'>
             <ComponentWrapper title='Settings' icon={faUsers}>
                 Settings
-
             </ComponentWrapper>
         </div>
     )

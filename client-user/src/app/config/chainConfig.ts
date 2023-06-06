@@ -11,5 +11,5 @@ export const config = {
 
 // contract treba u .env
 export const contract = {
-    [Sepolia.chainId]: '0xdd0084a3Ea1A148d02d89EBE59a2F99c5eBe5935',
+    [Sepolia.chainId]: '0xd875A8fDd636F2C71239334E3a1aA58165538f2D',
 }

@@ -1,7 +1,7 @@
 import {ComponentWrapper, Table} from "@app/components";
-import {faTag, faUsers} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSearch, faUsers} from "@fortawesome/free-solid-svg-icons";
 import _ from "lodash";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const users = [
     { id: 1, wallet: 'asdaskjdhjdhkasjdhaskjdhaksj', roles: 'sdf' },
@@ -13,16 +13,38 @@ const users = [
     { id: 1, wallet: 'lskdjflsdkjflsdkfjsdlkfjsdlkfjsdl', roles: 'sdf' },
 ]
 
+const cartItems = [
+    { key: 'Item 1', value: 'Value 1' },
+    { key: 'Item 2', value: 'Value 2' },
+    { key: 'Item 3', value: 'Value 3' },
+    // add more items as needed
+];
+
+
 const Accounts = () => {
     return (
         <div className='my-8 w-full'>
             <ComponentWrapper title='Acount Management' icon={faUsers}>
                 <div className='flex flex-row space-x-4 text-black'>
-                    <div className='w-8/12'>
-                        <Table data={users} />
+                    <div className='w-3/4'>
+                        <div className='bg-light-primary text-black rounded-3xl'>
+                            <Table data={users} />
+                        </div>
                     </div>
-                    <div className='bg-light-primary w-4/12 text-black mt-6 rounded-2xl'>
-                        <span><FontAwesomeIcon icon={faTag} className="mx-2" />new_product_schema_</span>
+                    <div className='bg-light-primary w-1/4  mt-6 text-black rounded-3xl '>
+                        <div className="bg-white rounded-3xl">
+                            <div className="bg-light-secondary rounded-3xl px-2 py-2">
+                                <h2 className="text-xl font-semibold"><FontAwesomeIcon icon={faSearch} className="mx-2" />Company</h2>
+                            </div>
+                            <div className="mt-4">
+                                {cartItems.map((item, index) => (
+                                    <div className="flex justify-between px-4 py-1 font-bold text-lg" key={index}>
+                                        <p className="">{item.key}</p>
+                                        <p>{item.value}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </ComponentWrapper>

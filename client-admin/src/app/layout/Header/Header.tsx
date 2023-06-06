@@ -7,6 +7,7 @@ import StringNFT from "@app/abi/StringNFT.json";
 import { Contract } from "ethers";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { contract } from "@app/config/chainConfig.ts";
 
 const Header = () => {
     const theme = useSelector((state:any) => state.config.theme);
@@ -19,7 +20,7 @@ const Header = () => {
     const [contractInstance, setContractInstance] = useState<Contract | null>(null);
     useEffect(() => {
         if(library){
-            setContractInstance(new Contract('0x6AE5a7048ac76C4026cdBBFd47268Bc647933a9d', StringNFT.abi, library));
+            setContractInstance(new Contract(contract.address, StringNFT.abi, library));
         }
     }, [library]);
 
@@ -93,7 +94,7 @@ const Header = () => {
                                     <Link to="/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200" onClick={() => setIsDropdownOpen(false)}>
                                         Account
                                     </Link>
-                                    <Link to='https://sepolia.etherscan.io/address/0x6AE5a7048ac76C4026cdBBFd47268Bc647933a9d' target='_blank'>
+                                    <Link to={`https://sepolia.etherscan.io/address/0x6AE5a7048ac76C4026cdBBFd47268Bc647933a9d`} target='_blank'>
                                     <span className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                                         View on Etherscan
                                     </span>

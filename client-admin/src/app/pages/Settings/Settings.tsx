@@ -1,7 +1,13 @@
+import {ComponentWrapper} from "@app/components";
+import {faUsers} from "@fortawesome/free-solid-svg-icons";
+
 const Settings = () => {
     return (
         <div className='my-8 w-full'>
-            Settings
+            <ComponentWrapper title='Settings' icon={faUsers}>
+                Settings
+
+            </ComponentWrapper>
         </div>
     )
 }

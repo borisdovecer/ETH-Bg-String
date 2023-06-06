@@ -8,27 +8,35 @@ import {
     faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import _ from "lodash";
 import {useSelector} from "react-redux";
+import {useState} from "react";
 
 interface IItem {
+    id: string,
     text: string,
     link: string,
     icon: any
 };
 
 const items: IItem[] = [
-    { text: "Home", link: "/", icon: faHome },
-    { text: "Accounts", link: "/accounts", icon: faUsers },
-    { text: "Dashboard", link: "/dashboard", icon: faTachometerAlt },
-    { text: "Products", link: "/products", icon: faBoxOpen },
-    { text: "Transfer", link: "/transfer", icon: faArrowAltCircleRight },
-    { text: "Settings", link: "/settings", icon: faCog },
+    { id: "home", text: "Home", link: "/", icon: faHome },
+    { id: "accounts", text: "Accounts", link: "/accounts", icon: faUsers },
+    { id: "dashboard", text: "Dashboard", link: "/dashboard", icon: faTachometerAlt },
+    { id: "products", text: "Products", link: "/products", icon: faBoxOpen },
+    { id: "transfer", text: "Transfer", link: "/transfer", icon: faArrowAltCircleRight },
+    { id: "settings", text: "Settings", link: "/settings", icon: faCog },
 ];
 
 const Sidebar = ({openSidebar, setOpenSidebar}:any) => {
     const theme = useSelector((state:any) => state.config.theme);
+    const location = useLocation()
+    const [activeItem, setActiveItem] = useState<string>(_.split(location.pathname, '/')[1]);
+
+    const handleItemClick = (itemId: string) => {
+        setActiveItem(itemId);
+    };
 
     return (
         <div className={`${!theme ? 'border-dark-primary text-light-primary' : 'bg-dark-secondary'} w-full z-10 h-screen pt-4 px-4 border-r`}>
@@ -37,8 +45,8 @@ const Sidebar = ({openSidebar, setOpenSidebar}:any) => {
             </div>
             <ul className='space-y-6 pt-6 text-left'>
                 {_.map(items, (item: IItem, index: number) => (
-                    <li key={index}>
-                        <Link to={item.link} className='text-xl text-light-primary hover:text-blue-500'>
+                    <li key={index} onClick={() => handleItemClick(item.id)}>
+                        <Link to={item.link}  className={`text-xl text-light-primary hover:text-blue-500 ${activeItem === item.id ? 'text-blue-500' : ''}`}>
                             <FontAwesomeIcon icon={item.icon} className="mr-4" />
                             {openSidebar && <span>{item.text}</span>}
                         </Link>

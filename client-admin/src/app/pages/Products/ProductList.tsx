@@ -7,6 +7,20 @@ import {useContractFunction, useEthers} from "@usedapp/core";
 import {Contract} from "ethers";
 import {contract} from "@app/config/chainConfig.ts";
 import StringNFT from "@app/abi/StringNFT.json";
+import {Link} from "react-router-dom";
+
+const images = [
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+    {id: 1, image: 'https://via.placeholder.com/150'},
+];
 
 const fields = [
     { label: 'name_', name: 'name', type: 'text' },
@@ -20,7 +34,7 @@ const fields = [
 
 const ProductList = () => {
     const [formData, setFormData] = useState<any>({});
-    const { activateBrowserWallet, account, library }:any = useEthers();
+    const {  account, library }:any = useEthers();
     const [contractInstance, setContractInstance] = useState<Contract | null>(null);
     const { send, state } = useContractFunction(contractInstance, 'addProduct', {});
 
@@ -37,7 +51,7 @@ const ProductList = () => {
     }
 
     const handleSubmit = () => {
-        const { name, description, manufacturer, category, productTokens, expireDate, exists } = formData;
+        const { name, description, manufacturer, category } = formData;
         send(0,name, description, manufacturer, category, 234).then((res) => console.log(res))
         console.log(state)
     }
@@ -46,8 +60,17 @@ const ProductList = () => {
         <div className='my-8 w-full'>
             <ComponentWrapper title='Products' icon={faBoxOpen}>
                 <div className='flex flex-row space-x-4'>
-                    <div className='border-2 w-full border-light-primary'>
+                    <div className='border-2 w-full h-[600px] border-light-primary custom-scrollbar overflow-y-scroll'>
+                        <div className="grid grid-cols-3 gap-4 py-4">
+                            {images.map((img, index) => (
+                                <Link to={`/products/${img.id}`}>
+                                    <div key={index} className="flex justify-center items-center">
+                                        <img className="w-48 h-48 object-cover rounded-3xl" src={img.image} alt="Example" />
+                                    </div>
+                                </Link>
 
+                            ))}
+                        </div>
                     </div>
                     <div className='bg-light-primary w-full text-black rounded-2xl p-4'>
                         <span><FontAwesomeIcon icon={faTag} className="mx-2" />new_product_schema_</span>

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 
 pragma solidity ^0.8.9;
-import "./_Base.sol";
+
 import "./_Permissible.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -10,15 +10,17 @@ error InvalidProductIndex();
 error MintTooMuchError();
 error ProductDoesntExist();
 
-contract StringNFT is BaseContract, Permissible {
+contract StringNFT is Permissible {
     event CompanyData(Company company);
 
-    function addCompany(string calldata _companyName) external {
-        companies[counters.companyCount] = Company(_companyName, new address[](0), new uint32[](0), 0);
+    // COMPANY:
+
+    function addCompany(string calldata _companyName) external onlyOwner {
         counters.companyCount++;
+        companies[counters.companyCount] = Company(_companyName, new address[](0), new uint32[](0), 0, true);
     }
 
-    function getCompanyBy(uint16 _companyId) external view returns  (Company memory) {
+    function getCompanyById(uint16 _companyId) external view returns  (Company memory) {
         Company memory company = companies[_companyId];
         return company;
     }
@@ -33,15 +35,17 @@ contract StringNFT is BaseContract, Permissible {
         return allCompanies;
     }
 
-    function removeCompany(uint16 _companyId) external {
+    function removeCompany(uint16 _companyId) external onlyOwner {
         delete companies[_companyId];
         counters.companyCount--;
     }
 
-    function addEmployeeToCompany(uint16 _companyId, address _employeeAddress, uint8 _permissions) external {
-        employees[_employeeAddress] = Employee(_companyId, _permissions);
-        companies[_companyId].employees.push(_employeeAddress);
+    // EMPLOYEE:
+
+    function addEmployeeToCompany(uint16 _companyId, address _employeeAddress, uint8 _permissions) external minimumLevel(3) {
         counters.employeeCount++;
+        employees[_employeeAddress] = Employee(_employeeAddress, _companyId, _permissions);
+        companies[_companyId].employees.push(_employeeAddress);
     }
 
     function getEmployee(address _employeeAddress) external view returns (Employee memory){
@@ -61,15 +65,17 @@ contract StringNFT is BaseContract, Permissible {
     }
 
     // this should also remove the employee from the employees array in the company
-    function removeEmployee(address _employeeAddress) external{
+    function removeEmployee(address _employeeAddress) external minimumLevel(3) {
         delete employees[_employeeAddress];
         counters.employeeCount--;
     }
 
-    function addProductToCompany(uint16 _companyId, string memory _productName, string memory _metadata) external {
+    // PRODUCT:
+
+    function addProductToCompany(uint16 _companyId, string memory _productName, string memory _metadata) external minimumLevel(1) {
+        counters.productCount++;
         products[counters.productCount] = Product(_productName, _metadata, new uint64[](0), true);
         companies[_companyId].products.push(counters.productCount);
-        counters.productCount++;
     }
 
     function getProduct(uint64 _productId) external view returns (Product memory){
@@ -87,18 +93,20 @@ contract StringNFT is BaseContract, Permissible {
         return allProducts;
     }
 
-    function removeProduct(uint64 _productId) external{
+    function removeProduct(uint64 _productId) external minimumLevel(1) {
         delete products[_productId];
         counters.productCount--;
     }
 
-    function mint(uint32 _productId) external {
+    // MINT AND TRANSFER: 
+
+    function mint(uint32 _productId) external minimumLevel(2) {
         counters.tokenIdCount++;
         Product storage productToMint = products[_productId];
 
-        // if(!product.exists){
-            // revert ProductDoesntExist();
-        // }
+        if(!productToMint.exists){
+            revert ProductDoesntExist();
+        }
 
         productToMint.productTokens.push(counters.tokenIdCount);
        _mint(msg.sender, counters.tokenIdCount);
@@ -108,7 +116,7 @@ contract StringNFT is BaseContract, Permissible {
         _burn(_tokenId);
     }
 
-    function mintBulk(uint64 _productId, uint16 amount) external {
+    function mintBulk(uint64 _productId, uint16 amount) external minimumLevel(2) {
         if (amount > MAX_MINT_AMOUNT)
              revert MintTooMuchError();
 
@@ -117,23 +125,31 @@ contract StringNFT is BaseContract, Permissible {
         }
     }
 
-    function transferTo(address to, uint256 _tokenId) external  {
+    function transferTo(address to, uint256 _tokenId) external minimumLevel(0)  {
         transferFrom(msg.sender, to, _tokenId);
     }
 
-    function bulkTransfer(address to, uint256[] memory tokenIds) external {
+    function bulkTransfer(address to, uint256[] memory tokenIds) external minimumLevel(0) {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             transferFrom(msg.sender, to, tokenIds[i]);
         }
     }
 
     function walletOfOwner(address targetWallet) external view returns (uint256[] memory){
-        uint256 tokenCount = balanceOf(targetWallet);
-        uint256[] memory tokensId = new uint256[](tokenCount);
-        for (uint256 i = 0; i < tokenCount; i++) {
+        uint tokenCount = balanceOf(targetWallet);
+        uint[] memory tokensId = new uint[](tokenCount);
+        for (uint i = 0; i < tokenCount; i++) {
             tokensId[i] = tokenOfOwnerByIndex(targetWallet, i);
         }
         return tokensId;
+    }
+
+    // PRIVATE:
+
+    function _removeFromUint32ArrayAtIndex(uint32[] storage array, uint index) internal {
+        require(index < array.length, "Index out of bounds");
+        array[index] = array[array.length - 1];
+        array.pop();
     }
 
     constructor() ERC721("StringNFT", "SNFT") {}

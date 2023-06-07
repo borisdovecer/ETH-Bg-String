@@ -14,15 +14,17 @@ abstract contract StringModel {
         address[] employees;
         uint32[] products;
         uint32 productCount;
+        bool exists;
     }
 
     struct Employee {
-        // 0 - can view
-        // 1 - can transfer
+        // 0 - can transfer
+        // 1 - can Define
         // 2 - can mint
         // 3 - can authorize
-        uint128 companyId;
-        uint8 permissions;
+        address employeeAddress;
+        uint16 companyId;
+        uint8 level;
     }
 
     struct Product {

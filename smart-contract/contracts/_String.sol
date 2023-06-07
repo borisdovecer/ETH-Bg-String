@@ -64,7 +64,6 @@ contract StringNFT is Permissible {
         return allEmployees;
     }
 
-    // this should also remove the employee from the employees array in the company
     function removeEmployee(address _employeeAddress) external minimumLevel(3) {
         delete employees[_employeeAddress];
         counters.employeeCount--;
@@ -142,14 +141,6 @@ contract StringNFT is Permissible {
             tokensId[i] = tokenOfOwnerByIndex(targetWallet, i);
         }
         return tokensId;
-    }
-
-    // PRIVATE:
-
-    function _removeFromUint32ArrayAtIndex(uint32[] storage array, uint index) internal {
-        require(index < array.length, "Index out of bounds");
-        array[index] = array[array.length - 1];
-        array.pop();
     }
 
     constructor() ERC721("StringNFT", "SNFT") {}

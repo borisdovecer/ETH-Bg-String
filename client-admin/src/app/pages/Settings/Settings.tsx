@@ -21,7 +21,9 @@ const Settings = () => {
     }, [account, library]);
 
     useEffect(() => {
-        contractInstance?.companies(0).then((res:string) => console.log(res))
+        if (contractInstance) {
+            contractInstance?.getAllCompanies().then((res:string) => console.log(res))
+        }
     }, [contractInstance])
 
     const handleChange = (e:any) => {

@@ -9,7 +9,6 @@ export const config = {
     },
 };
 
-// contract treba u .env
 export const contract = {
-    address: '0xF692D943e7D18b290CC38f51583b4c80D9917b5C',
+    address: '0x0C417e1b32bAdf9c862F5Eb80068D350DB0c239C',
 }

@@ -1,31 +1,18 @@
-import { ComponentWrapper, Table } from "@app/components";
-import { faUsers, faBuilding } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContractFunction, useEthers } from "@usedapp/core";
-import { useEffect, useState } from "react";
+import _ from "lodash";
 import { Contract } from "ethers";
-import { contract } from "@app/config/chainConfig.ts";
-import StringNFT from "@app/abi/StringNFT.json";
 import { useSelector } from "react-redux";
-
-const users = [
-    { id: 1, wallet: 'asdaskjdhjdhkasjdhaskjdhaksj', roles: 'sdf' },
-    { id: 1, wallet: 'lksajflkasjflskajflskajdlask', roles: 'sdf' },
-    { id: 1, wallet: 'daskjdlaskdjlaskdjasdasd', roles: 'sdf' },
-    { id: 1, wallet: 'xcvxcvxcvxcvcxvcxvxcvxcvcx', roles: 'sdf' },
-    { id: 1, wallet: 'xcvxcvxcvsflisjfkldsjffsdflksj', roles: 'sdf' },
-    { id: 1, wallet: 'sdfsdlkjflsdkfjsldkfjlsdkfj', roles: 'sdf' },
-    { id: 1, wallet: 'lskdjflsdkjflsdkfjsdlkfjsdlkfjsdl', roles: 'sdf' },
-]
-
-const cartItems = [
-    { key: 'Item 1', value: 'Value 1' },
-    { key: 'Item 2', value: 'Value 2' },
-    { key: 'Item 3', value: 'Value 3' },
-];
+import { useEffect, useState } from "react";
+import StringNFT from "@app/abi/StringNFT.json";
+import { contract } from "@app/config/chainConfig.ts";
+import { ComponentWrapper, Table } from "@app/components";
+import { useContractFunction, useEthers } from "@usedapp/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBuilding, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 const Accounts = () => {
     const theme = useSelector((state:any) => state.config.theme);
+    const [employees, setEmployees] = useState<any>([])
+    const [company, setCompany] = useState<any>([])
     const [address, setAddress] = useState('');
     const { activateBrowserWallet, account, library }:any = useEthers();
     const [contractInstance, setContractInstance] = useState<Contract | null>(null);
@@ -39,16 +26,16 @@ const Accounts = () => {
     }, [account, library]);
 
     useEffect(() => {
-        contractInstance?.getCompanyBy(0).then((res:string) => console.log(res))
+        contractInstance?.getAllEmployeesInCompany(0).then((res:string) => setEmployees(res));
+        contractInstance?.getCompanyById(1).then((res:string) => setCompany(res));
     }, [contractInstance]);
 
     const handleAddEmployee = async () => {
-        const { send } = addEmployee;
         if (!account) {
             await activateBrowserWallet();
             return;
         }
-        send(0, address, 3).then((res) => console.log(res));
+        addEmployee.send(1, address, 3).then((res) => console.log(res));
     };
     const handleRemoveEmployee = async () => {
         const { send } = removeEmployee
@@ -56,12 +43,20 @@ const Accounts = () => {
             await activateBrowserWallet();
             return;
         }
-        send(0, address).then((res) => console.log(res));
+        send(address).then((res) => console.log(res));
     };
 
     const handleChange = (e:any) => {
         setAddress(e.target.value);
     }
+
+    const accounts = _.map(employees, (item) => {
+        return {
+            companyId: item[1],
+            wallet: item[0],
+            permissionLevel: item[2]
+        }
+    })
 
     return (
         <div className='my-8 w-full'>
@@ -69,21 +64,19 @@ const Accounts = () => {
                 <div className='flex flex-row space-x-4 text-black'>
                     <div className='w-3/4'>
                         <div className={`${theme ? 'bg-light-primary text-dark-primary' : 'bg-dark-primary text-light-primary' } text-black rounded-3xl`}>
-                            <Table data={users} />
+                            {!_.isEmpty(accounts) && <Table data={accounts}/>}
                         </div>
                     </div>
                     <div className={`${theme ? 'bg-light-primary text-dark-primary' : 'bg-dark-primary text-light-primary' } w-1/4  mt-6 rounded-3xl `}>
                         <div className="rounded-3xl">
                             <div className={`${theme ? 'bg-light-secondary' : 'bg-dark-secondary'} rounded-3xl px-2 py-2`}>
-                                <h2 className="text-xl font-semibold"><FontAwesomeIcon icon={faBuilding} className="mx-2" />Company</h2>
+                                <h2 className="text-xl font-semibold"><FontAwesomeIcon icon={faBuilding} className="mx-2" />{company[0]}</h2>
                             </div>
                             <div className="mt-4">
-                                {cartItems.map((item, index) => (
-                                    <div className="flex justify-between px-4 py-1 font-bold text-lg" key={index}>
-                                        <p className="">{item.key}</p>
-                                        <p>{item.value}</p>
+                                    <div className="flex justify-between px-4 py-1 font-bold text-lg">
+                                        <p className="">company data...</p>
+                                        <p></p>
                                     </div>
-                                ))}
                             </div>
                         </div>
                     </div>

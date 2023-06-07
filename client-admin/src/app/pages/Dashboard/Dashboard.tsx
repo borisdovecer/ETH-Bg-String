@@ -1,14 +1,15 @@
-import { ComponentWrapper, Table } from "@app/components";
-import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
+import _ from "lodash";
 import { useEffect, useState } from "react";
 import { getEtherscanData } from "@app/api";
+import { ComponentWrapper, Table } from "@app/components";
+import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = () => {
     const [data, setData] = useState<any>(null)
 
     useEffect(() => {
         getEtherscanData().then((res) => {
-            setData(res)
+            setData(_.orderBy(res, 'timeStamp', 'desc'))
         })
     },[])
 

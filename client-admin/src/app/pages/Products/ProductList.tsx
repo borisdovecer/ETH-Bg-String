@@ -1,28 +1,20 @@
-import {faBoxOpen, faTag} from "@fortawesome/free-solid-svg-icons";
-import { ComponentWrapper } from "@app/components";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import _ from "lodash";
-import {useEffect, useState} from "react";
-import {useContractFunction, useEthers} from "@usedapp/core";
-import {Contract} from "ethers";
-import {contract} from "@app/config/chainConfig.ts";
+import { Contract } from "ethers";
+import { fields } from './fields.ts';
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import StringNFT from "@app/abi/StringNFT.json";
-import {Link} from "react-router-dom";
-
-const fields = [
-    { label: 'name_', name: 'name', type: 'text' },
-    { label: 'description_', name: 'description', type: 'text' },
-    { label: 'manufacturer_', name: 'manufacturer', type: 'text' },
-    { label: 'category', name: 'category', type: 'text' },
-    { label: 'productTokens', name: 'productTokens', type: 'text' },
-    { label: 'expireDate', name: 'expireDate', type: 'text' },
-    { label: 'metadata', name: 'metadata', type: 'text' },
-]
+import { ComponentWrapper } from "@app/components";
+import { contract } from "@app/config/chainConfig.ts";
+import { useContractFunction, useEthers } from "@usedapp/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxOpen, faTag } from "@fortawesome/free-solid-svg-icons";
+import axios from "@app/config/axios.ts";
 
 const ProductList = () => {
     const [formData, setFormData] = useState<any>({});
     const [products, setProducts] = useState(null);
-    const {  account, library }:any = useEthers();
+    const { account, library }:any = useEthers();
     const [contractInstance, setContractInstance] = useState<Contract | null>(null);
     const { send } = useContractFunction(contractInstance, 'addProductToCompany', {});
 
@@ -36,7 +28,19 @@ const ProductList = () => {
         contractInstance?.getAllProducts(0).then((res:any) => {
             setProducts(res);
         })
-    }, [contractInstance])
+    }, [contractInstance]);
+
+    useEffect(() => {
+        if (products) {
+            const ee = (products?.[2][1]);
+
+            const splitted = (_.split(ee, '/'))
+            axios.get(`https://ipfs.io/ipfs/${splitted[2]}/${splitted[3]}`).then((res) => {
+                console.log(res)
+            })
+
+        }
+    }, [products])
 
     const handleChange = (e:any) => {
         const { name, value } = e.target;
@@ -48,7 +52,6 @@ const ProductList = () => {
         send(0, name, metadata).then((res) => console.log(res))
     }
 
-    console.log(products)
     return (
         <div className='my-8 w-full'>
             <ComponentWrapper title='Products' icon={faBoxOpen}>

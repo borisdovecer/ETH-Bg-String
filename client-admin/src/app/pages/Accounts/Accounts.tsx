@@ -29,7 +29,7 @@ const Accounts = () => {
     const [address, setAddress] = useState('');
     const { activateBrowserWallet, account, library }:any = useEthers();
     const [contractInstance, setContractInstance] = useState<Contract | null>(null);
-    const addEmployee = useContractFunction(contractInstance, 'addEmployee', {});
+    const addEmployee = useContractFunction(contractInstance, 'addEmployeeToCompany', {});
     const removeEmployee = useContractFunction(contractInstance, 'removeEmployee', {});
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const Accounts = () => {
     }, [account, library]);
 
     useEffect(() => {
-        contractInstance?.getAllEmployees(1).then((res:string) => console.log(res))
+        contractInstance?.getCompanyBy(0).then((res:string) => console.log(res))
     }, [contractInstance]);
 
     const handleAddEmployee = async () => {
@@ -48,7 +48,7 @@ const Accounts = () => {
             await activateBrowserWallet();
             return;
         }
-        send(1, address,[true,true,true,true]).then((res) => console.log(res));
+        send(0, address, 3).then((res) => console.log(res));
     };
     const handleRemoveEmployee = async () => {
         const { send } = removeEmployee

@@ -40,7 +40,7 @@ const Sidebar = ({openSidebar, setOpenSidebar}:any) => {
 
     return (
         <div className={`${!theme ? 'border-dark-primary text-light-primary' : 'bg-dark-secondary'} w-full z-10 h-screen pt-4 px-2 border-r`}>
-            <div className='flex justify-left text-light-primary mt-12 ml-1 text-xl'>
+            <div className='flex justify-left text-light-primary mt-12 ml-3 text-xl'>
                 <FontAwesomeIcon icon={faBars} onClick={() => setOpenSidebar(!openSidebar)} />
             </div>
             <ul className='space-y-6 pt-6 text-left'>
